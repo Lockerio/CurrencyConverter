@@ -34,11 +34,9 @@ def convert():
     if value_error_message:
         return jsonify(value_error_message)
 
-    return jsonify({"Result": converter.convert(currency_from_value,
-                                                currency_from_nominal,
-                                                currency_to_value,
-                                                currency_to_nominal,
-                                                value)})
+    result = converter.convert(currency_from_value, currency_from_nominal,
+                               currency_to_value, currency_to_nominal, value)
+    return jsonify({"Result": result})
 
 
 @app.route("/")
