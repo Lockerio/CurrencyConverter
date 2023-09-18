@@ -3,7 +3,7 @@ class Converter:
         currency_in_RUB1 = self.convert_currency_to_rub(nominal1, value_in_RUB1)
         currency_in_RUB2 = self.convert_currency_to_rub(nominal2, value_in_RUB2)
 
-        multiplier = currency_in_RUB2 / currency_in_RUB1
+        multiplier = currency_in_RUB1 / currency_in_RUB2
         return multiplier * value
 
 

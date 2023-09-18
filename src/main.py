@@ -1,10 +1,12 @@
 import requests
 from flask import Flask, jsonify, request
-from src.converter import Converter
-
+from src.utils.converter import Converter
+from src.utils.validator import Validator
 
 app = Flask(__name__)
 converter = Converter()
+validator = Validator()
+
 
 @app.route("/convert")
 def convert():
@@ -12,13 +14,25 @@ def convert():
 
     currency_from = request.args["from"]
     currency_to = request.args["to"]
-    value = float(request.args["value"])
+    value = request.args["value"]
 
     data_as_dict = data["Valute"]
-    currency_from_value = data_as_dict[currency_from]["Value"]
-    currency_from_nominal = data_as_dict[currency_from]["Nominal"]
-    currency_to_value = data_as_dict[currency_to]["Value"]
-    currency_to_nominal = data_as_dict[currency_to]["Nominal"]
+
+    (currency_from_value,
+     currency_from_nominal,
+     currency_from_error_message) = validator.check_currency(currency_from, data_as_dict)
+    if currency_from_error_message:
+        return jsonify(currency_from_error_message)
+
+    (currency_to_value,
+     currency_to_nominal,
+     currency_to_error_message) = validator.check_currency(currency_to, data_as_dict)
+    if currency_to_error_message:
+        return jsonify(currency_to_error_message)
+
+    value, value_error_message = validator.check_value(value)
+    if value_error_message:
+        return jsonify(value_error_message)
 
     return jsonify({"Result": converter.convert(currency_from_value,
                                                 currency_from_nominal,
