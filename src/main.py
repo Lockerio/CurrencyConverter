@@ -8,7 +8,7 @@ converter = Converter()
 validator = Validator()
 
 
-@app.route("/convert")
+@app.route("/api/convert")
 def convert():
     data = requests.get('https://www.cbr-xml-daily.ru/daily_json.js').json()
 
@@ -39,7 +39,7 @@ def convert():
     return jsonify({"Result": result})
 
 
-@app.route("/")
+@app.route("/api")
 def main():
     data = requests.get('https://www.cbr-xml-daily.ru/daily_json.js').json()
     date = data["Date"]
